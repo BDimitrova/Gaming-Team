@@ -71,6 +71,7 @@
   outline: none;
   background-color: whitesmoke;
   resize: none;
+  color: black;
 }
 
 #create-container select {
@@ -86,6 +87,11 @@
   width: 320px;
   color: #050912;
   background-color: whitesmoke;
+}
+
+#create-container select option {
+  color: #050912;
+  font-weight: bold;
 }
 
 #create-container input[type="submit"] {
