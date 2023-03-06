@@ -10,6 +10,18 @@
 </head>
 
 <body>
+
+    <!-- In case of error, you should display div with class "errorContainer" -->
+    <!-- You can choose to display the first error or all of them (error message/s in your opinion) -->
+
+    {{#if error}}
+    <div>
+        <div class="errorContainer">
+            <p>{{error}}</p>
+        </div>
+    </div>
+    {{/if}}
+
     <header class="header">
         <nav>
             <img src="/static/images/logo.jpg" class="logo">
@@ -18,7 +30,7 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/games/catalog">All Games Code</a></li>
                 {{#if user}}
-                <li><a href="#">Search</a></li>
+                <li><a href="/search">Search</a></li>
                 <li><a href="/games/create">Create Game Offer</a></li>
                 <li><a href="/auth/logout">Logout</a></li>
                 {{else}}
@@ -30,7 +42,7 @@
     </header>
 
     {{{body}}}
-    
+
     <footer>
         <p>Back-End 2023</p>
     </footer>

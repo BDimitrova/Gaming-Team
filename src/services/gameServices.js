@@ -10,13 +10,13 @@ exports.delete = (gameId) => Games.findByIdAndDelete(gameId);
 
 exports.updateOne = (gameId, gameData) => Games.findByIdAndUpdate(gameId, gameData);
 
-exports.search = (gameText, gamePlatform) => {
+exports.search = (gameText, gamePlat) => {
     if (gameText) {
-        return (Crypto.find({ name: { $regex: gameText, $options: 'i' } }).lean());
+        return (Games.find({ name: { $regex: gameText, $options: 'i' } }).lean());
     }
 
-    if (!gameText && gamePlatform) {
-        return (Crypto.find({ platform: gamePlatform }).lean());
+    if (!gameText && gamePlat) {
+        return (Games.find({ platform: gamePlat }).lean());
     }
 
 }
