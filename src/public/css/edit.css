@@ -85,6 +85,11 @@
   color: #050912;
 }
 
+#edit-container select option {
+  color: #050912;
+  font-weight: bold;
+}
+
 #edit-container input[type="submit"] {
   width: 320px;
   height: 35px;

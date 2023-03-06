@@ -33,77 +33,74 @@ function getErrorMessage(error) {
 
 }
 
-router.get('/details/:gamesId', async (req, res) => {
-    let game = await gameService.getOne(req.params.gamesId);
+router.get('/details/:gameId', async (req, res) => {
 
+    let game = await gameService.getOne(req.params.gameId); 
     let gameData = await game.toObject();
 
     let isOwner = gameData.owner == req.user?._id;
     let buyer = game.getBuyers();
-
     let isBought = req.user && buyer.some(c => c._id == req.user?._id);
 
     res.render('games/details', { ...gameData, isOwner, isBought });
 });
 
-// async function isOwner(req, res, next) {
-//     let crypto = await cryptoService.getOne(req.params.cryptoId);
+async function isOwner(req, res, next) {
+    let games = await gameService.getOne(req.params.gameId);
 
-//     if (crypto.owner == req.user._id) {
-//         res.redirect(`/crypto/${req.params.cryptoId}/details`);
-//     } else {
-//         next();
-//     }
-// }
+    if (games.owner == req.user._id) {
+        res.redirect(`/games/details/${req.params.gameId}`);
+    } else {
+        next();
+    }
+}
 
-// router.get('/:cryptoId/buy', isOwner, async (req, res) => {
-//     let crypto = await cryptoService.getOne(req.params.cryptoId);
+router.get('/buy/:gameId', isOwner, async (req, res) => {
+    let games = await gameService.getOne(req.params.gameId);
 
-//     crypto.buyer.push(req.user._id);
-//     await crypto.save();
+    games.buyer.push(req.user._id);
+    await games.save();
 
-//     res.redirect(`/crypto/${req.params.cryptoId}/details`);
+    res.redirect(`/games/details/${req.params.gameId}`);
 
-// });
+});
 
-// async function checkIsOwner(req, res, next) {
-//     let crypto = await cryptoService.getOne(req.params.cryptoId);
+async function checkIsOwner(req, res, next) {
+    let games = await gameService.getOne(req.params.gameId);
 
-//     if (crypto.owner == req.user._id) {
-//         next();
-//     } else {
-//         res.redirect(`/crypto/${req.params.cryptoId}/details`);
-//     }
-// }
+    if (games.owner == req.user._id) {
+        next();
+    } else {
+        res.redirect(`/games/details/${req.params.gameId}`);
+    }
+}
 
-// router.get('/:cryptoId/delete', checkIsOwner, async (req, res) => {
-//     try {
-//         await cryptoService.delete(req.params.cryptoId);
+router.get('/delete/:gameId', checkIsOwner, async (req, res) => {
+    try {
+        await gameService.delete(req.params.gameId);
 
-//         res.redirect('/crypto');
-//     } catch (error) {
-//         console.log(error);
-//         res.render('crypto/create', { error: getErrorMessage(error) });
-//     }
+        res.redirect('/games/catalog');
+    } catch (error) {
+        res.render('games/create', { error: getErrorMessage(error) });
+    }
 
-// });
+});
 
-// router.get('/:cryptoId/edit', checkIsOwner, async (req, res) => {
-//     let crypto = await cryptoService.getOne(req.params.cryptoId);
+router.get('/edit/:gameId', checkIsOwner, async (req, res) => {
+    let game = await gameService.getOne(req.params.gameId);
 
-//     res.render('crypto/edit', { ...crypto.toObject() });
-// });
+    res.render('games/edit', { ...game.toObject() });
+});
 
-// router.post('/:cryptoId/edit', checkIsOwner, async (req, res) => {
-//     try {
-//         await cryptoService.updateOne(req.params.cryptoId, req.body);
+router.post('/edit/:gameId', checkIsOwner, async (req, res) => {
+    try {
+        await gameService.updateOne(req.params.gameId, req.body);
 
-//         res.redirect(`/crypto/${req.params.cryptoId}/details`);
-//     } catch {
-//         console.log(error);
-//         res.render('crypto/create', { error: getErrorMessage(error) });
-//     }
+        res.redirect(`/games/details/${req.params.gameId}`);
+    } catch {
+        res.render('games/create', { error: getErrorMessage(error) });
+    }
 
-// });
+});
 
 module.exports = router;
