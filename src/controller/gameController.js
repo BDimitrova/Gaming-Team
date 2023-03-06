@@ -41,8 +41,6 @@ router.get('/details/:gamesId', async (req, res) => {
     let isOwner = gameData.owner == req.user?._id;
     let buyer = game.getBuyers();
 
-    console.log(buyer);
-
     let isBought = req.user && buyer.some(c => c._id == req.user?._id);
 
     res.render('games/details', { ...gameData, isOwner, isBought });
