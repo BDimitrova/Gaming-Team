@@ -137,7 +137,7 @@ footer p {
   animation-fill-mode: forwards;
 }
 
-@keyframes cssAnimation {
+/* @keyframes cssAnimation {
   to {
     width: 0;
     height: 0;
@@ -153,4 +153,4 @@ footer p {
     visibility: hidden;
     padding: 0;
   }
-}
+} */
